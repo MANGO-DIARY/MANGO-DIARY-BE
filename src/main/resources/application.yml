@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: mango_diary
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mango_diary_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mangolion2024@gmail.com
+    password: rvrhkpnuudyqzyin
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+jwt:
+  secret: edb3cb200a10665278946e3350638d3aee029716dd0313ad537456925646c606f38a7acf186e6d4238d35c933d56046570225766e4f3b2fcaddfd0c9ab804cbe
