@@ -1,17 +1,23 @@
 package com.mango.diary.diary.domain;
 
 
+import com.mango.diary.common.enums.Emotion;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "diary")
 @Entity
 public class Diary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     @Column(nullable = false)
@@ -21,8 +27,8 @@ public class Diary {
     private LocalDate date;
 
     @Column(nullable = false)
-    private String emotion;
+    private Emotion emotion;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id") // auth 생성되면 1대다로 수정
     private Long user;
 }
