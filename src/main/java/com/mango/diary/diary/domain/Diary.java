@@ -1,11 +1,14 @@
 package com.mango.diary.diary.domain;
 
 
+import com.mango.diary.auth.domain.User;
+import com.mango.diary.auth.support.AuthUser;
 import com.mango.diary.common.enums.Emotion;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -29,6 +32,10 @@ public class Diary {
     @Column(nullable = false)
     private Emotion emotion;
 
-    @Column(name = "user_id") // auth 생성되면 1대다로 수정
-    private Long user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private AiComment aiComments;
 }
