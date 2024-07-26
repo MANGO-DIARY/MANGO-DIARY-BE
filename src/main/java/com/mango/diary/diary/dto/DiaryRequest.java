@@ -8,7 +8,6 @@ public record DiaryRequest(
         String content,
         LocalDateTime date,
         Emotion emotion,
-        String aiComment,
-        Long user
+        String aiComment
 ) {
 }
