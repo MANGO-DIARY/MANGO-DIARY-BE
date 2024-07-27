@@ -38,12 +38,18 @@ public class AuthConfig implements WebMvcConfigurer {
     private HandlerInterceptor tokenBlackListInterceptor() {
         return new SelectiveApiInterceptor(tokenBlackListInterceptor)
                 .addIncludePattern("/api/v1/auth/sign-out", DELETE)
+                .addIncludePattern("/api/v1/diary/**",POST)
+                .addIncludePattern("/api/v1/diary/**",GET)
+                .addIncludePattern("/api/v1/diary/**",DELETE)
                 ;
     }
 
     private HandlerInterceptor signInInterceptor() {
         return new SelectiveApiInterceptor(signInInterceptor)
                 .addIncludePattern("/api/v1/auth/sign-out", DELETE)
+                .addIncludePattern("/api/v1/diary/**",POST)
+                .addIncludePattern("/api/v1/diary/**",GET)
+                .addIncludePattern("/api/v1/diary/**",DELETE)
                 ;
     }
 

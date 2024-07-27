@@ -1,11 +1,12 @@
 package com.mango.diary.diary.dto;
 
+import com.mango.diary.common.enums.Emotion;
+
 public record DiaryResponse(
         Long id,
         String content,
         String date,
-        String emotion,
-        String aiComment,
-        Long user
+        Emotion emotion,
+        String aiComment
 ) {
 }

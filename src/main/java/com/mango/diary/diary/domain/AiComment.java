@@ -21,7 +21,7 @@ public class AiComment {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne()
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "diary_id")
     private Diary diary;
 }

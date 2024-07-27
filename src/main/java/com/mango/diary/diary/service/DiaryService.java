@@ -1,5 +1,7 @@
 package com.mango.diary.diary.service;
 
+import com.mango.diary.auth.domain.User;
+import com.mango.diary.auth.repository.UserRepository;
 import com.mango.diary.common.enums.Emotion;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
@@ -20,9 +22,10 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final AiCommentRepository aiCommentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public DiaryResponse createDiary(DiaryRequest diaryRequest) {
+    public DiaryResponse createDiary(DiaryRequest diaryRequest, Long userId) {
         if(diaryRepository.existsByDate(diaryRequest.date().toLocalDate())){
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_LIMIT_EXCEEDED);
         }
@@ -44,11 +47,13 @@ public class DiaryService {
         }
 
 
+        User user = userRepository.findById(userId).orElseThrow(() -> new DiaryException(DiaryErrorCode.USER_NOT_FOUND));
+
         Diary diary = Diary.builder()
                 .content(diaryRequest.content())
                 .date(diaryRequest.date().toLocalDate())
                 .emotion(diaryRequest.emotion())
-                .user(diaryRequest.user())
+                .user(user)
                 .build();
 
        AiComment aiComment = AiComment.builder()
@@ -68,9 +73,8 @@ public class DiaryService {
                diary.getId(),
                diary.getContent(),
                diary.getDate().toString(),
-               diary.getEmotion().changeString(),
-               aiCommentContent,
-               diary.getUser()
+               diary.getEmotion(),
+               aiCommentContent
        );
     }
 
@@ -80,18 +84,20 @@ public class DiaryService {
                 diary.getId(),
                 diary.getContent(),
                 diary.getDate().toString(),
-                diary.getEmotion().changeString(),
-                aiCommentRepository.findById(diary.getId()).orElseThrow().getContent(),
-                diary.getUser()
+                diary.getEmotion(),
+                aiCommentRepository.findById(diary.getId()).orElseThrow().getContent()
         );
     }
 
     @Transactional
-    public void deleteDiary(Long id) {
-        if (!diaryRepository.existsById(id)) {
+    public boolean deleteDiary(Long diary_id) {
+        if (!diaryRepository.existsById(diary_id)) {
             throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
+        } else {
+            Diary diary = diaryRepository.findById(diary_id).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+
+            diaryRepository.delete(diary);
+            return true;
         }
-        aiCommentRepository.deleteAiCommentByDiaryId(id);
-        diaryRepository.deleteById(id);
     }
 }
