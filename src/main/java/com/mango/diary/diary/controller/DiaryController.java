@@ -1,6 +1,8 @@
 package com.mango.diary.diary.controller;
 
 import com.mango.diary.auth.support.AuthUser;
+import com.mango.diary.diary.exception.DiaryErrorCode;
+import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
 import com.mango.diary.diary.dto.DiaryRequest;
 import com.mango.diary.diary.dto.DiaryResponse;
@@ -28,6 +30,10 @@ public class DiaryController {
 
     @DeleteMapping("/diary")
     public ResponseEntity<String> deleteDiary(@RequestParam Long diary_id) {
-        return diaryService.deleteDiary(diary_id) ? new ResponseEntity<>("Diary deleted", HttpStatus.OK) : new ResponseEntity<>("Diary not found", HttpStatus.NOT_FOUND);
+        if (diaryService.deleteDiary(diary_id)) {
+            return new ResponseEntity<>("Diary deleted", HttpStatus.OK);
+        } else {
+            throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
+        }
     }
 }
