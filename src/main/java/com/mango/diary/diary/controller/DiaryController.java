@@ -1,7 +1,7 @@
 package com.mango.diary.diary.controller;
 
 import com.mango.diary.auth.support.AuthUser;
-import com.mango.diary.diary.dto.AiEmotionResponse;
+import com.mango.diary.diary.dto.DiaryListDTO;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
@@ -9,6 +9,7 @@ import com.mango.diary.diary.dto.DiaryRequest;
 import com.mango.diary.diary.dto.DiaryResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,13 @@ public class DiaryController {
         } else {
             throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
         }
+    }
+
+    @GetMapping("/diary/search")
+    public ResponseEntity<Page<DiaryListDTO>> searchDiary(@RequestParam String keyword,
+                                                          @RequestParam int page,
+                                                          @RequestParam int size,
+                                                          @Parameter(hidden = true) @AuthUser Long userId){
+        return ResponseEntity.ok(diaryService.searchDiary(keyword, page, size, userId));
     }
 }
