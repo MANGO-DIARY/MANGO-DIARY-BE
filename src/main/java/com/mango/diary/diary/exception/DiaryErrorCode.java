@@ -15,6 +15,9 @@ public enum DiaryErrorCode implements ErrorCode {
     INVALID_EMOTION(400, 3005, "일기 감정이 올바르지 않습니다."),
     INVALID_EMOTION_TYPE(400, 3006, "감정 타입이 올바르지 않습니다."),
     USER_NOT_FOUND(404, 3007, "사용자를 찾을 수 없습니다."),
+    DIARY_NOT_FOUND_BY_EMOTION(404, 3008, "감정에 해당하는 일기를 찾을 수 없습니다."),
+    INVALID_DATE_FORMAT(400, 3009, "날짜 형식이 올바르지 않습니다."),
+    LIST_IS_NULL(400, 3010, "리스트가 비어있습니다."),
     ;
 
 
