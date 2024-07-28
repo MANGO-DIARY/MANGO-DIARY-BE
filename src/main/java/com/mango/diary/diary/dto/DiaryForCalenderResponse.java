@@ -4,9 +4,8 @@ import com.mango.diary.common.enums.Emotion;
 
 import java.time.LocalDate;
 
-public record DiaryResponse(
+public record DiaryForCalenderResponse(
         Long id,
-        String content,
         LocalDate date,
         Emotion emotion
 ) {

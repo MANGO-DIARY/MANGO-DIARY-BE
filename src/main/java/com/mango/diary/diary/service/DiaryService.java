@@ -2,20 +2,29 @@ package com.mango.diary.diary.service;
 
 import com.mango.diary.auth.domain.User;
 import com.mango.diary.auth.repository.UserRepository;
+
+import com.mango.diary.common.enums.Emotion;
+import com.mango.diary.diary.domain.DiaryStatus;
+import com.mango.diary.diary.dto.*;
+
 import com.mango.diary.diary.domain.AiComment;
-import com.mango.diary.diary.dto.DiaryListDTO;
+
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.repository.AiCommentRepository;
 import com.mango.diary.diary.domain.Diary;
-import com.mango.diary.diary.dto.DiaryRequest;
-import com.mango.diary.diary.dto.DiaryResponse;
 import com.mango.diary.diary.repository.DiaryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import org.springframework.stereotype.Service;
+
+import java.time.YearMonth;
+import java.util.List;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +38,8 @@ public class DiaryService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createDiary(DiaryRequest diaryRequest, Long userId) {
+    public AiEmotionResponse saveDiary(DiaryRequest diaryRequest, Long userId) {
+
         if (diaryRepository.existsByDate(diaryRequest.date())) {
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_ALREADY_EXISTS);
         }
@@ -62,15 +72,58 @@ public class DiaryService {
 
     }
 
-    public DiaryResponse readDiary(Long id) {
-        Diary diary = diaryRepository.findById(id).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
-        return new DiaryResponse(
+    public DiaryDetailResponse getDiary(Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+        return new DiaryDetailResponse(
                 diary.getId(),
                 diary.getContent(),
-                diary.getDate().toString(),
+                diary.getDate(),
                 diary.getEmotion(),
-                aiCommentRepository.findById(diary.getId()).orElseThrow().getContent()
+                aiCommentRepository.findByDiaryId(diary.getId()).orElseThrow(() -> new DiaryException(DiaryErrorCode.AI_COMMENT_NOT_FOUND)).getContent()
         );
+    }
+
+    public Page<DiaryResponse> getAllDiaries(int page, int size, Long userId){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diary> diaries = diaryRepository.findByUserIdOrderByDateDesc(userId, pageable);
+
+        return diaries.map(diary -> new DiaryResponse(
+                diary.getId(),
+                diary.getContent(),
+                diary.getDate(),
+                diary.getEmotion()
+        ));
+    }
+
+    public Page<DiaryResponse> getAllDiariesByEmotion(int page, int size, Emotion emotion,Long userId){
+       Pageable pageable = PageRequest.of(page, size);
+       Page<Diary> diaries = diaryRepository.findByUserIdAndEmotionOrderByDateDesc(userId, emotion, pageable);
+       return diaries.map(diary -> new DiaryResponse(
+               diary.getId(),
+               diary.getContent(),
+               diary.getDate(),
+               diary.getEmotion()
+       ));
+    }
+
+    public List<DiaryForCalenderResponse> getAllDiariesByMonth( Long year, Long month , Long userId) {
+        if(year < 1900 || month <= 0 || month > 12 || year > 2100) {
+            throw new DiaryException(DiaryErrorCode.INVALID_DATE_FORMAT);
+        }
+
+        YearMonth yearMonth = YearMonth.of(year.intValue(), month.intValue());
+
+        List<Diary> diaries = diaryRepository.findAllByDateBetweenAndUserId(yearMonth.atDay(1), yearMonth.atEndOfMonth(), userId);
+
+        if (diaries.isEmpty()) {
+            throw new DiaryException(DiaryErrorCode.LIST_IS_NULL);
+        }
+
+        return diaries.stream().map(diary -> new DiaryForCalenderResponse(
+                diary.getId(),
+                diary.getDate(),
+                diary.getEmotion()
+        )).toList();
     }
 
     @Transactional
