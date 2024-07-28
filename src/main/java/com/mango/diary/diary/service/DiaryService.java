@@ -3,6 +3,7 @@ package com.mango.diary.diary.service;
 import com.mango.diary.auth.domain.User;
 import com.mango.diary.auth.repository.UserRepository;
 import com.mango.diary.diary.domain.AiComment;
+import com.mango.diary.diary.dto.DiaryListDTO;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.repository.AiCommentRepository;
@@ -12,6 +13,10 @@ import com.mango.diary.diary.dto.DiaryResponse;
 import com.mango.diary.diary.repository.DiaryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -79,4 +84,15 @@ public class DiaryService {
             return true;
         }
     }
+
+    public Page<DiaryListDTO> searchDiary(String keyword, int page, int size, Long userId) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<Diary> diaryPage = diaryRepository.findByUserIdAndContentContainingIgnoreCase(userId, keyword, pageable);
+        return diaryPage.map(diary -> new DiaryListDTO(
+                diary.getId(),
+                diary.getContent(),
+                diary.getDate(),
+                diary.getEmotion()));
+    }
+
 }
