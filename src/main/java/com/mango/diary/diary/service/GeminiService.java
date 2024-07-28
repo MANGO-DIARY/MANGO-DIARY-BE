@@ -55,9 +55,6 @@ public class GeminiService {
 
         GeminiRequest request = new GeminiRequest(prompt);
 
-        ResponseEntity<GeminiResponse> response = getGeminiResponseResponseEntity(request, headers);
-
-
         String emotionsText = getGeminiResponseResponseEntity(request, headers)
                 .getBody()
                 .candidates().get(0)
@@ -104,9 +101,6 @@ public class GeminiService {
                 "이고. 일기내용은 " + diary.getContent() + "이야";
 
         GeminiRequest request = new GeminiRequest(prompt);
-
-        ResponseEntity<GeminiResponse> response = getGeminiResponseResponseEntity(request, headers);
-
 
         String aiResponse = getGeminiResponseResponseEntity(request, headers)
                 .getBody()
