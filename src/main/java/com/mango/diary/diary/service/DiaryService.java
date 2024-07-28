@@ -3,79 +3,60 @@ package com.mango.diary.diary.service;
 import com.mango.diary.auth.domain.User;
 import com.mango.diary.auth.repository.UserRepository;
 import com.mango.diary.common.enums.Emotion;
+import com.mango.diary.diary.domain.DiaryStatus;
+import com.mango.diary.diary.dto.AiEmotionResponse;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.repository.AiCommentRepository;
-import com.mango.diary.diary.domain.AiComment;
 import com.mango.diary.diary.domain.Diary;
 import com.mango.diary.diary.dto.DiaryRequest;
 import com.mango.diary.diary.dto.DiaryResponse;
 import com.mango.diary.diary.repository.DiaryRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.EnumUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+import java.util.List;
+
+@RequiredArgsConstructor
 @Service
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final AiCommentRepository aiCommentRepository;
     private final UserRepository userRepository;
+    private final GeminiService geminiService;
 
     @Transactional
-    public DiaryResponse createDiary(DiaryRequest diaryRequest, Long userId) {
-        if(diaryRepository.existsByDate(diaryRequest.date().toLocalDate())){
+    public AiEmotionResponse createDiary(DiaryRequest diaryRequest, Long userId) {
+        if (diaryRepository.existsByDate(diaryRequest.date())) {
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_LIMIT_EXCEEDED);
         }
 
-        if(diaryRequest.content().isEmpty()){
+        if (diaryRequest.content().isEmpty()) {
             throw new DiaryException(DiaryErrorCode.INVALID_CONTENT);
         }
 
-        if(diaryRequest.date().toString().isEmpty()){
+        if (diaryRequest.date().toString().isEmpty()) {
             throw new DiaryException(DiaryErrorCode.INVALID_DATE);
         }
 
-        if(diaryRequest.emotion().toString().isEmpty()){
-            throw new DiaryException(DiaryErrorCode.INVALID_EMOTION);
-        }
-
-        if(!EnumUtils.isValidEnum(Emotion.class, diaryRequest.emotion().name())){
-            throw new DiaryException(DiaryErrorCode.INVALID_EMOTION_TYPE);
-        }
-
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new DiaryException(DiaryErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).
+                orElseThrow(() -> new DiaryException(DiaryErrorCode.USER_NOT_FOUND));
 
         Diary diary = Diary.builder()
                 .content(diaryRequest.content())
-                .date(diaryRequest.date().toLocalDate())
-                .emotion(diaryRequest.emotion())
+                .date(diaryRequest.date())
                 .user(user)
+                .status(DiaryStatus.WRITING)
                 .build();
 
-       AiComment aiComment = AiComment.builder()
-               .content(diaryRequest.aiComment())
-               .diary(diary)
-               .build();
+        diaryRepository.save(diary);
 
-       diaryRepository.save(diary);
-       aiCommentRepository.save(aiComment);
+        List<Emotion> emotions = geminiService.analyzeEmotion(diary.getContent());
 
-       String aiCommentContent = aiCommentRepository.findById(diary.getId())
-                .map(AiComment::getContent)
-                .orElseThrow(() -> new DiaryException(DiaryErrorCode.AI_COMMENT_NOT_FOUND));
-
-
-        return new DiaryResponse(
-               diary.getId(),
-               diary.getContent(),
-               diary.getDate().toString(),
-               diary.getEmotion(),
-               aiCommentContent
-       );
+        return new AiEmotionResponse(diary.getId(), emotions);
     }
 
     public DiaryResponse readDiary(Long id) {
