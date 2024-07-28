@@ -14,6 +14,7 @@ public enum AuthErrorCode implements ErrorCode {
     VERIFICATION_INCOMPLETE(400, 1005, "이메일 인증이 완료되지 않았습니다."),
     INCORRECT_INPUT(400, 1006, "회원정보가 올바르지 않습니다."),
     ALREADY_SIGN_OUT(401, 1007, "이미 로그아웃 된 사용자입니다."),
+    INTERNAL_SERVER_ERROR(500, 1008, "서버 오류가 발생했습니다."),
     //---------------------------------------------------------------------------------------
     INVALID_TOKEN_TYPE(400, 2000, "토큰의 타입이 유효하지 않습니다."),
     EXPIRED_TOKEN(401, 2001,"토큰이 만료되었습니다."),
@@ -24,7 +25,14 @@ public enum AuthErrorCode implements ErrorCode {
     INVALID_TOKEN_FORMAT(401, 2007,"토큰의 형식이 유효하지 않습니다."),
     JWT_ERROR(401, 2008, "토큰 관련 오류가 발생했습니다."),
     REFRESH_TOKEN_NOT_FOUND(404, 2009, "리프레시 토큰을 찾을 수 없습니다."),
-    INVALID_REFRESH_TOKEN(400, 2010, "리프레시 토큰이 유효하지 않습니다."),;
+    INVALID_REFRESH_TOKEN(400, 2010, "리프레시 토큰이 유효하지 않습니다."),
+    KAKAO_UNAUTHORIZED(401, 4000, "카카오 인증 오류입니다."),
+    KAKAO_FORBIDDEN(403, 4001, "카카오 접근이 금지되었습니다."),
+    KAKAO_NOT_FOUND(404, 4002, "카카오 리소스를 찾을 수 없습니다."),
+    KAKAO_BAD_REQUEST(400, 4003, "카카오 잘못된 요청입니다."),
+    KAKAO_INTERNAL_SERVER_ERROR(500, 4004, "카카오 서버 오류가 발생했습니다."),
+    ;
+
 
     private final int statusCode;
     private final int exceptionCode;

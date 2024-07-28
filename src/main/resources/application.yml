@@ -28,3 +28,18 @@ spring:
             enable: true
 jwt:
   secret: ${JWT_SECRET}
+
+oauth2:
+  provider:
+    kakao:
+      client-id: ${KAKAO_CLIENT_ID}
+      login-uri: ${KAKAO_LOGIN_URI}
+      token-uri: ${KAKAO_TOKEN_URI}
+      info-uri: ${KAKAO_INFO_URI}
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: ${GEMINI_API_URL}
+  prompt:
+    emotion: ${EMOTION_PROMPT_TEMPLATE}
+    advice: ${ADVICE_PROMPT_TEMPLATE}
