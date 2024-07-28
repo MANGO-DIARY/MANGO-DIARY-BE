@@ -2,12 +2,11 @@ package com.mango.diary.diary.controller;
 
 import com.mango.diary.auth.support.AuthUser;
 
-import com.mango.diary.diary.dto.DiaryListDTO;
+import com.mango.diary.common.enums.Emotion;
+import com.mango.diary.diary.dto.*;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
-import com.mango.diary.diary.dto.DiaryRequest;
-import com.mango.diary.diary.dto.DiaryResponse;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +43,13 @@ public class DiaryController {
     }
 
     @GetMapping("/diary/all/emotion")
-    public ResponseEntity<Page<DiaryResponse>> readAllDiariesByEmotion( @RequestParam int page, @RequestParam int size,
-            @RequestParam Emotion emotion, @Parameter(hidden = true) @AuthUser Long userId) {
+    public ResponseEntity<Page<DiaryResponse>> readAllDiariesByEmotion(@RequestParam int page, @RequestParam int size,
+                                                                       @RequestParam Emotion emotion, @Parameter(hidden = true) @AuthUser Long userId) {
         return ResponseEntity.ok(diaryService.getAllDiariesByEmotion(page, size, emotion, userId));
     }
 
     @GetMapping("/diary/all/month")
-    public ResponseEntity<List<DiaryForCalenderResponse>> readAllDiariesByMonth(@RequestParam("Year") Long year, @RequestParam("Month") Long month,  @Parameter(hidden = true) @AuthUser Long userId) {
+    public ResponseEntity<List<DiaryForCalenderResponse>> readAllDiariesByMonth(@RequestParam("Year") Long year, @RequestParam("Month") Long month, @Parameter(hidden = true) @AuthUser Long userId) {
         return ResponseEntity.ok(diaryService.getAllDiariesByMonth(year, month, userId));
     }
 

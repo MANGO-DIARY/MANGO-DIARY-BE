@@ -38,8 +38,7 @@ public class DiaryService {
     private final UserRepository userRepository;
 
     @Transactional
-    public AiEmotionResponse saveDiary(DiaryRequest diaryRequest, Long userId) {
-
+    public void createDiary(DiaryRequest diaryRequest, Long userId) {
         if (diaryRepository.existsByDate(diaryRequest.date())) {
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_ALREADY_EXISTS);
         }
@@ -69,7 +68,6 @@ public class DiaryService {
 
         diaryRepository.save(diary);
         aiCommentRepository.save(aiComment);
-
     }
 
     public DiaryDetailResponse getDiary(Long diaryId) {
