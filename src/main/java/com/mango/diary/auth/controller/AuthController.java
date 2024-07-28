@@ -7,6 +7,7 @@ import com.mango.diary.auth.controller.dto.UserDTO;
 import com.mango.diary.auth.jwt.dto.TokenResponse;
 import com.mango.diary.auth.service.AuthService;
 import com.mango.diary.auth.support.AuthUser;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ public class AuthController {
     }
 
     @DeleteMapping("/sign-out")
-    public ResponseEntity<?> signOut(@AuthUser Long userId, HttpServletRequest request) {
+    public ResponseEntity<?> signOut(@Parameter(hidden = true) @AuthUser Long userId,
+                                     HttpServletRequest request) {
         authService.signOut(userId, request);
         return ResponseEntity.ok().body("로그아웃 되었습니다.");
     }

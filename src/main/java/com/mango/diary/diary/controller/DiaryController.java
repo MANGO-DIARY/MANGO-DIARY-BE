@@ -7,6 +7,7 @@ import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
 import com.mango.diary.diary.dto.DiaryRequest;
 import com.mango.diary.diary.dto.DiaryResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,10 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/diary")
-    public ResponseEntity<AiEmotionResponse> saveDiary(@RequestBody DiaryRequest diaryRequest, @AuthUser Long userId) {
-        return ResponseEntity.ok(diaryService.createDiary(diaryRequest, userId));
+    public ResponseEntity<?> saveDiary(@RequestBody DiaryRequest diaryRequest,
+                                       @Parameter(hidden = true) @AuthUser Long userId) {
+        diaryService.createDiary(diaryRequest, userId);
+        return new ResponseEntity<>("일기가 작성되었습니다.", HttpStatus.CREATED);
     }
 
     @GetMapping("/diary")
