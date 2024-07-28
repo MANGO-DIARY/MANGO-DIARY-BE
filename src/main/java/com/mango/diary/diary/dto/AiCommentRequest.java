@@ -3,7 +3,7 @@ package com.mango.diary.diary.dto;
 import com.mango.diary.common.enums.Emotion;
 
 public record AiCommentRequest(
-        Long diaryId,
+        String diaryContent,
         Emotion emotion
 ) {
 }
