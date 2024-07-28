@@ -1,6 +1,7 @@
 package com.mango.diary.diary.controller;
 
 import com.mango.diary.auth.support.AuthUser;
+import com.mango.diary.diary.dto.AiEmotionResponse;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
@@ -19,7 +20,7 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/diary")
-    public ResponseEntity<DiaryResponse> saveDiary(@RequestBody DiaryRequest diaryRequest, @AuthUser Long userId) {
+    public ResponseEntity<AiEmotionResponse> saveDiary(@RequestBody DiaryRequest diaryRequest, @AuthUser Long userId) {
         return ResponseEntity.ok(diaryService.createDiary(diaryRequest, userId));
     }
 
