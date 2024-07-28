@@ -29,8 +29,12 @@ public class Diary {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Emotion emotion;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DiaryStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
