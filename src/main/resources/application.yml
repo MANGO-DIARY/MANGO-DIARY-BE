@@ -36,3 +36,10 @@ oauth2:
       login-uri: ${KAKAO_LOGIN_URI}
       token-uri: ${KAKAO_TOKEN_URI}
       info-uri: ${KAKAO_INFO_URI}
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: ${GEMINI_API_URL}
+  prompt:
+    emotion: ${EMOTION_PROMPT_TEMPLATE}
+    advice: ${ADVICE_PROMPT_TEMPLATE}
