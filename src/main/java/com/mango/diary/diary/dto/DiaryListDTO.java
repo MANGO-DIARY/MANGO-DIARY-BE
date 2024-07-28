@@ -4,10 +4,10 @@ import com.mango.diary.common.enums.Emotion;
 
 import java.time.LocalDate;
 
-public record DiaryRequest(
+public record DiaryListDTO(
+        Long id,
         String content,
         LocalDate date,
-        Emotion emotion,
-        String aiComment
-) {
+        Emotion emotion
+){
 }

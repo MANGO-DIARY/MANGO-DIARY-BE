@@ -22,7 +22,7 @@ services:
   springboot:
     env_file:
       - .env
-    image: tmdtmdqorekf/mango-diary:1.1
+    image: tmdtmdqorekf/mango-diary:latest
     container_name: springboot
     ports:
       - "8080:8080"

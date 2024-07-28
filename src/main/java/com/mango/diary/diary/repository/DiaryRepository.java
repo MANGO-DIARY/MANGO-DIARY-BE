@@ -17,5 +17,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Page<Diary> findByUserIdOrderByDateDesc(Long userId, Pageable pageable);
 
     Page<Diary> findByUserIdAndEmotionOrderByDateDesc(Long userId, Emotion emotion, Pageable pageable);
+
+    Page<Diary> findByUserIdAndContentContainingIgnoreCase(Long userId, String content, Pageable pageable);
+
 }
 

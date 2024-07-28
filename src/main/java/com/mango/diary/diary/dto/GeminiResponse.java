@@ -1,4 +1,4 @@
-package com.mango.diary.diary.service;
+package com.mango.diary.diary.dto;
 
 import java.util.List;
 

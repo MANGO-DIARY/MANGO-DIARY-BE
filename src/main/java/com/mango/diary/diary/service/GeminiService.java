@@ -1,13 +1,9 @@
 package com.mango.diary.diary.service;
 
 import com.mango.diary.common.enums.Emotion;
-import com.mango.diary.diary.domain.AiComment;
-import com.mango.diary.diary.domain.Diary;
-import com.mango.diary.diary.domain.DiaryStatus;
-import com.mango.diary.diary.dto.AiCommentRequest;
-import com.mango.diary.diary.dto.AiCommentResponse;
-import com.mango.diary.diary.repository.AiCommentRepository;
-import com.mango.diary.diary.repository.DiaryRepository;
+import com.mango.diary.diary.dto.*;
+import com.mango.diary.diary.exception.DiaryErrorCode;
+import com.mango.diary.diary.exception.DiaryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +26,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GeminiService {
 
-    private final DiaryRepository diaryRepository;
-    private final AiCommentRepository aiCommentRepository;
-
     private final RestTemplate restTemplate;
 
     @Value("${gemini.api.key}")
@@ -47,11 +40,11 @@ public class GeminiService {
     @Value("${gemini.prompt.advice}")
     private String GEMINI_API_ADVICE_TEMPLATE;
 
-    public List<Emotion> analyzeEmotion(String diary) {
+    public AiEmotionResponse analyzeEmotion(AiEmotionRequest aiEmotionRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + diary;
+        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + "일기내용은" + aiEmotionRequest.diaryContent() + "입니다.";
 
         GeminiRequest request = new GeminiRequest(prompt);
 
@@ -64,12 +57,19 @@ public class GeminiService {
         List<String> emotionsList = Arrays.asList(emotionsText.split(",\\s*"));
 
         List<Emotion> topEmotions = emotionsList.stream()
-                .map(Emotion::valueOf)
+                .map(this::parseEmotion)
                 .collect(Collectors.toList());
 
-        return topEmotions;
+        return new AiEmotionResponse(topEmotions);
     }
 
+    private Emotion parseEmotion(String emotionStr) {
+        try {
+            return Emotion.valueOf(emotionStr);
+        } catch (IllegalArgumentException e) {
+            throw new DiaryException(DiaryErrorCode.DIARY_ANALYSIS_FAILED);
+        }
+    }
 
 
     private ResponseEntity<GeminiResponse> getGeminiResponseResponseEntity(GeminiRequest request, HttpHeaders headers) {
@@ -89,35 +89,21 @@ public class GeminiService {
 
     @Transactional
     public AiCommentResponse getAiComment(AiCommentRequest aiCommentRequest) {
-        Diary diary = diaryRepository.findById(aiCommentRequest.diaryId())
-                .orElseThrow(() -> new RuntimeException("Diary not found"));
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
         String prompt = GEMINI_API_ADVICE_TEMPLATE + "\n" +
                 "감정은 " + aiCommentRequest.emotion() +
-                "이고. 일기내용은 " + diary.getContent() + "이야";
+                "이고. 일기내용은 " + aiCommentRequest.diaryContent() + "입니다.";
 
         GeminiRequest request = new GeminiRequest(prompt);
 
-        String aiResponse = getGeminiResponseResponseEntity(request, headers)
+        String aiComment = getGeminiResponseResponseEntity(request, headers)
                 .getBody()
                 .candidates().get(0)
                 .content().parts()
                 .get(0).text();
 
-        AiComment aiComment = AiComment.builder()
-                .content(aiResponse)
-                .diary(diary)
-                .build();
-
-        aiCommentRepository.save(aiComment);
-
-        diary.setStatus(DiaryStatus.COMPLETE);
-        diary.setEmotion(aiCommentRequest.emotion());
-
-        return new AiCommentResponse(aiComment.getContent());
+        return new AiCommentResponse(aiComment);
     }
 }
