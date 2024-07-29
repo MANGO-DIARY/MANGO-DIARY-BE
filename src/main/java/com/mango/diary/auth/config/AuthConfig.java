@@ -42,6 +42,7 @@ public class AuthConfig implements WebMvcConfigurer {
                 .addIncludePattern("/api/v1/diary/**",GET)
                 .addIncludePattern("/api/v1/diary/**",DELETE)
                 .addIncludePattern("/api/v1/statistics/**", GET)
+                .addIncludePattern("/api/v1/user/**", PATCH)
                 ;
     }
 
@@ -52,6 +53,7 @@ public class AuthConfig implements WebMvcConfigurer {
                 .addIncludePattern("/api/v1/diary/**",GET)
                 .addIncludePattern("/api/v1/diary/**",DELETE)
                 .addIncludePattern("/api/v1/statistics/**", GET)
+                .addIncludePattern("/api/v1/user/**", PATCH)
                 ;
     }
 

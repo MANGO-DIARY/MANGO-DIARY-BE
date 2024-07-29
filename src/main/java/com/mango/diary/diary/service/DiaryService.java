@@ -1,6 +1,8 @@
 package com.mango.diary.diary.service;
 
 import com.mango.diary.auth.domain.User;
+import com.mango.diary.auth.exception.AuthErrorCode;
+import com.mango.diary.auth.exception.AuthException;
 import com.mango.diary.auth.repository.UserRepository;
 
 import com.mango.diary.common.enums.Emotion;
@@ -55,7 +57,7 @@ public class DiaryService {
         }
 
         User user = userRepository.findById(userId).
-                orElseThrow(() -> new DiaryException(DiaryErrorCode.USER_NOT_FOUND));
+                orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
 
         Diary diary = Diary.builder()
                 .content(diaryRequest.content())
