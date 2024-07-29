@@ -40,6 +40,9 @@ public class GeminiService {
     @Value("${gemini.prompt.advice}")
     private String GEMINI_API_ADVICE_TEMPLATE;
 
+    @Value("${gemini.prompt.monthly-comment}")
+    private String GEMINI_API_MONTHLY_COMMENT_TEMPLATE;
+
     public AiEmotionResponse analyzeEmotion(AiEmotionRequest aiEmotionRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -72,22 +75,6 @@ public class GeminiService {
     }
 
 
-    private ResponseEntity<GeminiResponse> getGeminiResponseResponseEntity(GeminiRequest request, HttpHeaders headers) {
-        HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
-
-        String url = UriComponentsBuilder.fromHttpUrl(GEMINI_API_URL)
-                .queryParam("key", GEMINI_API_KEY)
-                .toUriString();
-
-        ResponseEntity<GeminiResponse> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                GeminiResponse.class);
-        return response;
-    }
-
-    @Transactional
     public AiCommentResponse getAiComment(AiCommentRequest aiCommentRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -105,5 +92,37 @@ public class GeminiService {
                 .get(0).text();
 
         return new AiCommentResponse(aiComment);
+    }
+
+    public String getMonthlyComment(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        String prompt = GEMINI_API_MONTHLY_COMMENT_TEMPLATE;
+
+        GeminiRequest request = new GeminiRequest(prompt);
+
+        String aiComment = getGeminiResponseResponseEntity(request, headers)
+                .getBody()
+                .candidates().get(0)
+                .content().parts()
+                .get(0).text();
+
+        return aiComment;
+    }
+
+    private ResponseEntity<GeminiResponse> getGeminiResponseResponseEntity(GeminiRequest request, HttpHeaders headers) {
+        HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(GEMINI_API_URL)
+                .queryParam("key", GEMINI_API_KEY)
+                .toUriString();
+
+        ResponseEntity<GeminiResponse> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                entity,
+                GeminiResponse.class);
+        return response;
     }
 }
