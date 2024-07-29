@@ -40,11 +40,14 @@ public class GeminiService {
     @Value("${gemini.prompt.advice}")
     private String GEMINI_API_ADVICE_TEMPLATE;
 
+    @Value("${gemini.prompt.monthly-comment}")
+    private String GEMINI_API_MONTHLY_COMMENT_TEMPLATE;
+
     public AiEmotionResponse analyzeEmotion(AiEmotionRequest aiEmotionRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + "일기내용은" + aiEmotionRequest.diaryContent() + "입니다.";
+        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + "\"" + aiEmotionRequest.diaryContent() + "\"";
 
         GeminiRequest request = new GeminiRequest(prompt);
 
@@ -72,6 +75,42 @@ public class GeminiService {
     }
 
 
+    public AiCommentResponse getAiComment(AiCommentRequest aiCommentRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        String prompt = GEMINI_API_ADVICE_TEMPLATE + "\n" +
+                "일기내용 :" + aiCommentRequest.diaryContent()  +
+                "감정 : " + aiCommentRequest.emotion();
+
+        GeminiRequest request = new GeminiRequest(prompt);
+
+        String aiComment = getGeminiResponseResponseEntity(request, headers)
+                .getBody()
+                .candidates().get(0)
+                .content().parts()
+                .get(0).text();
+
+        return new AiCommentResponse(aiComment);
+    }
+
+    public String getMonthlyComment(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        String prompt = GEMINI_API_MONTHLY_COMMENT_TEMPLATE;
+
+        GeminiRequest request = new GeminiRequest(prompt);
+
+        String aiComment = getGeminiResponseResponseEntity(request, headers)
+                .getBody()
+                .candidates().get(0)
+                .content().parts()
+                .get(0).text();
+
+        return aiComment;
+    }
+
     private ResponseEntity<GeminiResponse> getGeminiResponseResponseEntity(GeminiRequest request, HttpHeaders headers) {
         HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
 
@@ -85,25 +124,5 @@ public class GeminiService {
                 entity,
                 GeminiResponse.class);
         return response;
-    }
-
-    @Transactional
-    public AiCommentResponse getAiComment(AiCommentRequest aiCommentRequest) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-
-        String prompt = GEMINI_API_ADVICE_TEMPLATE + "\n" +
-                "감정은 " + aiCommentRequest.emotion() +
-                "이고. 일기내용은 " + aiCommentRequest.diaryContent() + "입니다.";
-
-        GeminiRequest request = new GeminiRequest(prompt);
-
-        String aiComment = getGeminiResponseResponseEntity(request, headers)
-                .getBody()
-                .candidates().get(0)
-                .content().parts()
-                .get(0).text();
-
-        return new AiCommentResponse(aiComment);
     }
 }
