@@ -36,6 +36,10 @@ jobs:
           docker build --no-cache -t tmdtmdqorekf/mango-diary:latest .
           docker push tmdtmdqorekf/mango-diary:latest
 
+      - name: Send Portainer restart spring-container Trigger
+        run: |
+          curl -X POST ${{ secrets.PORTAINER_WEBHOOK_LINK }}
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
