@@ -10,7 +10,7 @@ spring:
     show-sql: true
     database: postgresql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   data:
     redis:
       host: ${REDIS_HOST}
@@ -43,3 +43,4 @@ gemini:
   prompt:
     emotion: ${EMOTION_PROMPT_TEMPLATE}
     advice: ${ADVICE_PROMPT_TEMPLATE}
+    monthly-comment: ${MONTHLY_COMMENT_PROMPT_TEMPLATE}
