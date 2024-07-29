@@ -15,6 +15,8 @@ public enum AuthErrorCode implements ErrorCode {
     INCORRECT_INPUT(400, 1006, "회원정보가 올바르지 않습니다."),
     ALREADY_SIGN_OUT(401, 1007, "이미 로그아웃 된 사용자입니다."),
     INTERNAL_SERVER_ERROR(500, 1008, "서버 오류가 발생했습니다."),
+    USER_NOT_FOUND(404, 1009, "사용자를 찾을 수 없습니다."),
+    USERNAME_IS_SAME(400, 1010, "같은 이름입니다."),
     //---------------------------------------------------------------------------------------
     INVALID_TOKEN_TYPE(400, 2000, "토큰의 타입이 유효하지 않습니다."),
     EXPIRED_TOKEN(401, 2001,"토큰이 만료되었습니다."),
