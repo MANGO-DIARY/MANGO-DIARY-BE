@@ -4,7 +4,6 @@ import com.mango.diary.auth.domain.User;
 import com.mango.diary.auth.repository.UserRepository;
 
 import com.mango.diary.common.enums.Emotion;
-import com.mango.diary.diary.domain.DiaryStatus;
 import com.mango.diary.diary.dto.*;
 
 import com.mango.diary.diary.domain.AiComment;
@@ -14,6 +13,8 @@ import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.repository.AiCommentRepository;
 import com.mango.diary.diary.domain.Diary;
 import com.mango.diary.diary.repository.DiaryRepository;
+import com.mango.diary.statistics.entity.EmotionStatistics;
+import com.mango.diary.statistics.repository.StatisticsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
 
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final AiCommentRepository aiCommentRepository;
     private final UserRepository userRepository;
+    private final StatisticsRepository statisticsRepository;
+    private final GeminiService geminiService;
 
     @Transactional
     public void createDiary(DiaryRequest diaryRequest, Long userId) {
@@ -68,6 +71,23 @@ public class DiaryService {
 
         diaryRepository.save(diary);
         aiCommentRepository.save(aiComment);
+
+        Optional<EmotionStatistics> emotionStatistics = statisticsRepository.findByUserIdAndYearMonth(userId, YearMonth.from(diary.getDate()));
+
+        if (emotionStatistics.isPresent()) {
+            EmotionStatistics statistics = emotionStatistics.get();
+            statistics.increaseEmotionCount(diary.getEmotion());
+            statisticsRepository.save(statistics);
+        } else {
+            EmotionStatistics statistics = EmotionStatistics.builder()
+                    .user(user)
+                    .monthlyComment(geminiService.getMonthlyComment())
+                    .yearMonth(YearMonth.from(diary.getDate()))
+                    .build();
+            statistics.increaseEmotionCount(diary.getEmotion());
+            statisticsRepository.save(statistics);
+        }
+
     }
 
     public DiaryDetailResponse getDiary(Long diaryId) {
@@ -130,6 +150,12 @@ public class DiaryService {
             throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
         } else {
             Diary diary = diaryRepository.findById(diary_id).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+
+            statisticsRepository.findByUserIdAndYearMonth(diary.getUser().getId(), YearMonth.from(diary.getDate()))
+                    .ifPresent(statistics -> {
+                        statistics.decreaseEmotionCount(diary.getEmotion());
+                        statisticsRepository.save(statistics);
+                    });
 
             diaryRepository.delete(diary);
             return true;
