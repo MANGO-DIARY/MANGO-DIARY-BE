@@ -15,7 +15,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("아프지망고 API").version("1.0").description("아프지망고 API 자동 배포 테스트"))
+                .info(new Info().title("아프지망고 API").version("1.0").description("아프지망고 API 자동 배포 테스트2"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth", new io.swagger.v3.oas.models.security.SecurityScheme()
