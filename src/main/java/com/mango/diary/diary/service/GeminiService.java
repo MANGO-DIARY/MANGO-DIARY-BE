@@ -44,7 +44,7 @@ public class GeminiService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + "일기내용은" + aiEmotionRequest.diaryContent() + "입니다.";
+        String prompt = GEMINI_API_EMOTION_TEMPLATE + "\n" + "\"" + aiEmotionRequest.diaryContent() + "\"";
 
         GeminiRequest request = new GeminiRequest(prompt);
 
@@ -93,8 +93,8 @@ public class GeminiService {
         headers.set("Content-Type", "application/json");
 
         String prompt = GEMINI_API_ADVICE_TEMPLATE + "\n" +
-                "감정은 " + aiCommentRequest.emotion() +
-                "이고. 일기내용은 " + aiCommentRequest.diaryContent() + "입니다.";
+                "일기내용 :" + aiCommentRequest.diaryContent()  +
+                "감정 : " + aiCommentRequest.emotion();
 
         GeminiRequest request = new GeminiRequest(prompt);
 
