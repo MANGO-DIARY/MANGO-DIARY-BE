@@ -27,12 +27,12 @@ public class OAuthService {
     }
 
     public TokenResponse signIn(KakaoUser kakaoUser) {
-        if(userRepository.existsByUserEmail(kakaoUser.id().toString())){
-            User user = userRepository.findByUserEmail(kakaoUser.id().toString()).get();
+        if(userRepository.existsByUserEmail(kakaoUser.userEmail())){
+            User user = userRepository.findByUserEmail(kakaoUser.userEmail()).get();
             return jwtProvider.createTokens(user.getId());
         }
         User user = User.builder()
-                .userEmail(kakaoUser.id().toString())
+                .userEmail(kakaoUser.userEmail())
                 .userName(kakaoUser.userName())
                 .password("kakao_user")
                 .status(UserStatus.ACTIVE)
