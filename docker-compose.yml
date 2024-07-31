@@ -5,9 +5,9 @@ services:
     image: postgres:14
     container_name: postgres
     environment:
+      POSTGRES_DB: mango_diary_db
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-      POSTGRES_DB: mango_diary_db
     ports:
       - "5432:5432"
     volumes:
