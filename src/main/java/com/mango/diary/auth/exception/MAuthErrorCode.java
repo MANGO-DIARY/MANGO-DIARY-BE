@@ -5,7 +5,7 @@ import com.mango.diary.common.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public enum AuthErrorCode implements ErrorCode {
+public enum MAuthErrorCode implements ErrorCode {
     UNAUTHORIZED(401, 1000, "인증되지 않은 사용자입니다."),
     EMAIL_ALREADY_EXISTS(409, 1001, "이미 사용중인 이메일입니다."),
     INVALID_INPUT(400, 1002, "입력값이 올바르지 않습니다."),
@@ -40,7 +40,7 @@ public enum AuthErrorCode implements ErrorCode {
     private final int exceptionCode;
     private final String message;
 
-    AuthErrorCode(int statusCode, int exceptionCode, String message) {
+    MAuthErrorCode(int statusCode, int exceptionCode, String message) {
         this.statusCode = statusCode;
         this.exceptionCode = exceptionCode;
         this.message = message;
