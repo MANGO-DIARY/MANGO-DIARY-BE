@@ -287,3 +287,5 @@ gradle-app.setting
 .DS_Store
 
 .env
+
+/portainer_data/
