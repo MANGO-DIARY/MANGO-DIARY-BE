@@ -289,3 +289,4 @@ gradle-app.setting
 .env
 
 docker-compose.yml
+/portainer_data/
