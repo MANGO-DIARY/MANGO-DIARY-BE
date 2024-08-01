@@ -42,6 +42,8 @@ public class RestTemplateOAuthRequester {
     private String KAKAO_TOKEN_URI;
     @Value("${oauth2.provider.kakao.info-uri}")
     private String KAKAO_INFO_URI;
+    @Value("${oauth2.provider.kakao.scope}")
+    private String KAKAO_SCOPE;
 
     private final RestTemplate restTemplate;
 
@@ -65,11 +67,15 @@ public class RestTemplateOAuthRequester {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken.accessToken());
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add(SCOPE, KAKAO_SCOPE);
+
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
         URI infoUri = URI.create(KAKAO_INFO_URI);
         RequestEntity<?> requestEntity = new RequestEntity<>(headers, HttpMethod.GET, infoUri);
+
         Map<String, Object> response = requestUserAttributes(requestEntity);
         log.info("response: {}", response);
+
         return new KakaoUser(response);
     }
 
