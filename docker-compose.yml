@@ -1,9 +1,24 @@
 version: '3.8'
 
 services:
+  springboot:
+    env_file:
+      - .env
+    container_name: springboot
+    image: tmdtmdqorekf/mango-diary:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - backend-network
+
   postgres:
-    image: postgres:14
     container_name: postgres
+    image: postgres:14
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
     environment:
       POSTGRES_DB: mango_diary_db
       POSTGRES_USER: ${POSTGRESQL_USER}
@@ -11,40 +26,46 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./db/initdb.d:/docker-entrypoint-initdb.d:ro
       - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped # 강제종료 될 시 재시작
+    networks:
+      - backend-network
 
   redis:
-    image: redis:6
     container_name: redis
+    image: redis:6
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "6379:6379"
-
-  springboot:
-    env_file:
-      - .env
-    image: tmdtmdqorekf/mango-diary:latest
-    container_name: springboot
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-      - redis
+    volumes:
+      - redis-data:/var/lib/redis/data
+    networks:
+      - backend-network
 
   portainer:
-    image: portainer/portainer-ee:latest # Business Edition
     container_name: portainer
+    image: portainer/portainer-ee:latest # Business Edition
     ports:
       - "18000:8000"
       - "19000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data
+      - portainer_data:/var/lib/portainer/data
     environment:
       - PORTAINER_ARGS=--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key --tunnel-port=8000 --tunnel-certificate /certs/portainer.crt --tunnel-key /certs/portainer.key
       - PORTAINER_ENCRYPTION_KEY=${PORTAINER_ENCRYPTION_KEY}
     restart: always
 
 volumes:
-  postgres-data:
-  redis-data:
   portainer_data:
+  postgres-data:
+    external: true
+  redis-data:
+
+networks:
+  backend-network:
