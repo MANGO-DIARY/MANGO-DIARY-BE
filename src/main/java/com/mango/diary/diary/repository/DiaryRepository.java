@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     boolean existsByDate(LocalDate date);
@@ -20,5 +21,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     Page<Diary> findByUserIdAndContentContainingIgnoreCase(Long userId, String content, Pageable pageable);
 
+    Optional<Diary> findFirstByUserIdOrderByDateDesc(Long userId);
 }
 
