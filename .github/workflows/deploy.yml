@@ -39,7 +39,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/mango-diary:latest
-
-      - name: Send Portainer restart spring-container Trigger
-        run: |
-          curl -v -X POST --max-time 20 ${{ secrets.PORTAINER_WEBHOOK_LINK }}
