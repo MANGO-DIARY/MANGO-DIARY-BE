@@ -42,4 +42,4 @@ jobs:
 
       - name: Send Portainer restart spring-container Trigger
         run: |
-          curl -X POST ${{ secrets.PORTAINER_WEBHOOK_LINK }}
+          curl -v -X POST --max-time 20 ${{ secrets.PORTAINER_WEBHOOK_LINK }}
