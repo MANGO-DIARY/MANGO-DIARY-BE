@@ -36,7 +36,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     //postgresql
-    implementation 'org.postgresql:postgresql:42.6.0'
+    implementation 'org.postgresql:postgresql:42.7.2'
 
     //redis
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
