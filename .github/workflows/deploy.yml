@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@43-200-195-86 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@43.200.195.86 << 'EOF'
             cd MANGO_DIARY_BE
             docker-compose pull
             docker-compose up -d
