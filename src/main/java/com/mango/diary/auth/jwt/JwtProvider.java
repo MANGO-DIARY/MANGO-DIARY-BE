@@ -2,8 +2,8 @@ package com.mango.diary.auth.jwt;
 
 
 import com.mango.diary.auth.controller.dto.ReissueTokenResponse;
-import com.mango.diary.auth.exception.AuthErrorCode;
-import com.mango.diary.auth.exception.AuthException;
+import com.mango.diary.auth.exception.MAuthErrorCode;
+import com.mango.diary.auth.exception.MAuthException;
 import com.mango.diary.auth.jwt.dto.TokenResponse;
 import com.mango.diary.common.redis.RedisDao;
 import io.jsonwebtoken.*;
@@ -108,24 +108,24 @@ public class JwtProvider {
                     .getBody();
             String type = claims.get("type", String.class);
             if (!type.equals("access")) {
-                throw new AuthException(AuthErrorCode.INVALID_TOKEN_TYPE);
+                throw new MAuthException(MAuthErrorCode.INVALID_TOKEN_TYPE);
             }
             return claims.get("id", Long.class);
         } catch (ExpiredJwtException e) {
-            throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.EXPIRED_TOKEN);
         } catch (SecurityException e) {
-            throw new AuthException(AuthErrorCode.SECURITY_ERROR);
+            throw new MAuthException(MAuthErrorCode.SECURITY_ERROR);
         } catch (MalformedJwtException e) {
-            throw new AuthException(AuthErrorCode.MALFORMED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.MALFORMED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            throw new AuthException(AuthErrorCode.UNSUPPORTED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+            throw new MAuthException(MAuthErrorCode.INVALID_TOKEN);
         } catch (SignatureException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN_FORMAT);
+            throw new MAuthException(MAuthErrorCode.INVALID_TOKEN_FORMAT);
         } catch (JwtException e) {
             //위애서 안걸린 jwt 기타 익셉션
-            throw new AuthException(AuthErrorCode.JWT_ERROR);
+            throw new MAuthException(MAuthErrorCode.JWT_ERROR);
         }
     }
 
@@ -137,24 +137,24 @@ public class JwtProvider {
                     .getBody();
             String type = claims.get("type", String.class);
             if (!type.equals("refresh")) {
-                throw new AuthException(AuthErrorCode.INVALID_TOKEN_TYPE);
+                throw new MAuthException(MAuthErrorCode.INVALID_TOKEN_TYPE);
             }
             return claims.get("id", Long.class);
         } catch (ExpiredJwtException e) {
-            throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.EXPIRED_TOKEN);
         } catch (SecurityException e) {
-            throw new AuthException(AuthErrorCode.SECURITY_ERROR);
+            throw new MAuthException(MAuthErrorCode.SECURITY_ERROR);
         } catch (MalformedJwtException e) {
-            throw new AuthException(AuthErrorCode.MALFORMED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.MALFORMED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            throw new AuthException(AuthErrorCode.UNSUPPORTED_TOKEN);
+            throw new MAuthException(MAuthErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+            throw new MAuthException(MAuthErrorCode.INVALID_TOKEN);
         } catch (SignatureException e) {
-            throw new AuthException(AuthErrorCode.INVALID_TOKEN_FORMAT);
+            throw new MAuthException(MAuthErrorCode.INVALID_TOKEN_FORMAT);
         } catch (JwtException e) {
             //위애서 안걸린 jwt 기타 익셉션
-            throw new AuthException(AuthErrorCode.JWT_ERROR);
+            throw new MAuthException(MAuthErrorCode.JWT_ERROR);
         }
     }
 

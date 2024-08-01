@@ -1,8 +1,8 @@
 package com.mango.diary.auth.support;
 
 
-import com.mango.diary.auth.exception.AuthErrorCode;
-import com.mango.diary.auth.exception.AuthException;
+import com.mango.diary.auth.exception.MAuthErrorCode;
+import com.mango.diary.auth.exception.MAuthException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -20,7 +20,7 @@ public class AuthenticationContext {
 
     public Long getAuthentication(){
         if(Objects.isNull(this.userId)){
-            throw new AuthException(AuthErrorCode.UNAUTHORIZED);
+            throw new MAuthException(MAuthErrorCode.UNAUTHORIZED);
         }
         return userId;
     }

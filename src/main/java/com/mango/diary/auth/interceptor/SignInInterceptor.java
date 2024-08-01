@@ -1,10 +1,10 @@
 package com.mango.diary.auth.interceptor;
 
-import com.mango.diary.auth.exception.AuthErrorCode;
+import com.mango.diary.auth.exception.MAuthErrorCode;
 import com.mango.diary.auth.jwt.JwtProvider;
 import com.mango.diary.auth.support.AuthenticationContext;
 import com.mango.diary.auth.support.AuthenticationExtractor;
-import com.mango.diary.auth.exception.AuthException;
+import com.mango.diary.auth.exception.MAuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class SignInInterceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String accessToken = AuthenticationExtractor.extractAccessToken(request)
-                .orElseThrow(() -> new AuthException(AuthErrorCode.UNAUTHORIZED));
+                .orElseThrow(() -> new MAuthException(MAuthErrorCode.UNAUTHORIZED));
 
         Long userId = jwtProvider.extractIdFromAccessToken(accessToken);
         authenticationContext.setAuthentication(userId);

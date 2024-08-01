@@ -18,7 +18,9 @@ public enum DiaryErrorCode implements ErrorCode {
     INVALID_DATE_FORMAT(400, 3009, "날짜 형식이 올바르지 않습니다."),
     LIST_IS_NULL(400, 3010, "리스트가 비어있습니다."),
     //----------------- AI -----------------
-    DIARY_ANALYSIS_FAILED(400, 4000, "감정을 분석할 수 없는 일기입니다.");
+    DIARY_ANALYSIS_FAILED(400, 4000, "감정을 분석할 수 없는 일기입니다."),
+    //----------------- TODAY COMMENT -----------------
+    TODAY_COMMENT_NOT_FOUND(404, 6000, "오늘의 한마디를 찾을 수 없습니다."),;
 
 
     private final int statusCode;

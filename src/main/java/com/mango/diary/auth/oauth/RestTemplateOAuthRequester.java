@@ -2,7 +2,7 @@ package com.mango.diary.auth.oauth;
 
 import com.mango.diary.auth.controller.dto.OAuthSignInRequest;
 import com.mango.diary.auth.domain.KakaoUser;
-import com.mango.diary.auth.exception.AuthErrorCode;
+import com.mango.diary.auth.exception.MAuthErrorCode;
 import com.mango.diary.auth.oauth.dto.OAuthTokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.mango.diary.auth.exception.AuthException;
+import com.mango.diary.auth.exception.MAuthException;
 
 import java.net.URI;
 import java.util.Map;
@@ -87,20 +87,20 @@ public class RestTemplateOAuthRequester {
             HttpStatus statusCode = (HttpStatus) e.getStatusCode();
             switch (statusCode) {
                 case UNAUTHORIZED:
-                    throw new AuthException(AuthErrorCode.KAKAO_UNAUTHORIZED);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_UNAUTHORIZED);
                 case FORBIDDEN:
-                    throw new AuthException(AuthErrorCode.KAKAO_FORBIDDEN);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_FORBIDDEN);
                 case NOT_FOUND:
-                    throw new AuthException(AuthErrorCode.KAKAO_NOT_FOUND);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_NOT_FOUND);
                 case BAD_REQUEST:
-                    throw new AuthException(AuthErrorCode.KAKAO_BAD_REQUEST);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_BAD_REQUEST);
                 default:
-                    throw new AuthException(AuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
             }
         } catch (ResourceAccessException e) {
-            throw new AuthException(AuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
+            throw new MAuthException(MAuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            throw new AuthException(AuthErrorCode.INTERNAL_SERVER_ERROR);
+            throw new MAuthException(MAuthErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -120,20 +120,20 @@ public class RestTemplateOAuthRequester {
             HttpStatus statusCode = (HttpStatus) e.getStatusCode();
             switch (statusCode) {
                 case UNAUTHORIZED:
-                    throw new AuthException(AuthErrorCode.KAKAO_UNAUTHORIZED);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_UNAUTHORIZED);
                 case FORBIDDEN:
-                    throw new AuthException(AuthErrorCode.KAKAO_FORBIDDEN);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_FORBIDDEN);
                 case NOT_FOUND:
-                    throw new AuthException(AuthErrorCode.KAKAO_NOT_FOUND);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_NOT_FOUND);
                 case BAD_REQUEST:
-                    throw new AuthException(AuthErrorCode.KAKAO_BAD_REQUEST);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_BAD_REQUEST);
                 default:
-                    throw new AuthException(AuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
+                    throw new MAuthException(MAuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
             }
         } catch (ResourceAccessException e) {
-            throw new AuthException(AuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
+            throw new MAuthException(MAuthErrorCode.KAKAO_INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            throw new AuthException(AuthErrorCode.INTERNAL_SERVER_ERROR);
+            throw new MAuthException(MAuthErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
