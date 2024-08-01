@@ -62,9 +62,9 @@ services:
     restart: always
 
 volumes:
-  portainer_data:
-  postgres-data:
-  redis-data:
+  mango-diary-be_portainer_data:
+  mango-diary-be_postgres-data:
+  mango-diary-be_redis-data:
 
 networks:
   backend-network:
