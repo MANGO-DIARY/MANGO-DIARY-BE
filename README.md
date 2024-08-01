@@ -1,1 +1,3 @@
 ##MANGO DIARY BE
+
+08/01 CICD test
