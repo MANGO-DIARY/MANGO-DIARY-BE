@@ -27,7 +27,7 @@ services:
       - "5432:5432"
     volumes:
       - ./db/initdb.d:/docker-entrypoint-initdb.d:ro
-      - mango-diary-be_postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped # 강제종료 될 시 재시작
     networks:
       - backend-network
@@ -43,7 +43,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - mango-diary-be_redis-data:/var/lib/redis/data
+      - redis-data:/var/lib/redis/data
     networks:
       - backend-network
 
@@ -55,16 +55,16 @@ services:
       - "19000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - mango-diary-be_portainer_data:/var/lib/portainer/data
+      - portainer_data:/var/lib/portainer/data
     environment:
       - PORTAINER_ARGS=--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key --tunnel-port=8000 --tunnel-certificate /certs/portainer.crt --tunnel-key /certs/portainer.key
       - PORTAINER_ENCRYPTION_KEY=${PORTAINER_ENCRYPTION_KEY}
     restart: always
 
 volumes:
-  mango-diary-be_portainer_data:
-  mango-diary-be_postgres-data:
-  mango-diary-be_redis-data:
+  portainer_data:
+  postgres-data:
+  redis-data:
 
 networks:
   backend-network:
