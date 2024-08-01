@@ -2,10 +2,10 @@ package com.mango.diary.auth.service;
 
 import com.mango.diary.auth.controller.dto.SendMailDTO;
 import com.mango.diary.auth.controller.dto.VerificationPurpose;
-import com.mango.diary.auth.exception.AuthErrorCode;
+import com.mango.diary.auth.exception.MAuthErrorCode;
 import com.mango.diary.auth.repository.UserRepository;
 import com.mango.diary.common.redis.RedisDao;
-import com.mango.diary.auth.exception.AuthException;
+import com.mango.diary.auth.exception.MAuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,12 +27,12 @@ public class MailVerificationService {
         switch (purpose){
             case SIGN_UP:
                 if (userRepository.existsByUserEmail(userEmail)) {
-                    throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
+                    throw new MAuthException(MAuthErrorCode.EMAIL_ALREADY_EXISTS);
                 }
                 break;
             case RESET_PASSWORD:
                 if (!userRepository.existsByUserEmail(userEmail)) {
-                    throw new AuthException(AuthErrorCode.EMAIL_NOT_FOUND);
+                    throw new MAuthException(MAuthErrorCode.EMAIL_NOT_FOUND);
                 }
                 break;
         }
@@ -50,7 +50,7 @@ public class MailVerificationService {
     public void verifyCode(String userEmail, String code) {
         String verificationCode = redisDao.getVerificationCode(userEmail);
         if(!code.equals(verificationCode)){
-            throw new AuthException(AuthErrorCode.INVALID_VERIFICATION_CODE);
+            throw new MAuthException(MAuthErrorCode.INVALID_VERIFICATION_CODE);
         }
         redisDao.setVerification(userEmail, 3L);
     }
