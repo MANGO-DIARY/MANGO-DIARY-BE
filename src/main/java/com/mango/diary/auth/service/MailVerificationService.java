@@ -40,7 +40,7 @@ public class MailVerificationService {
         String verificationCode = generateVerificationCode();
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(userEmail);
-        message.setSubject("RH_CAPSULE 인증 코드입니다");
+        message.setSubject("아프지망고 인증 코드입니다");
         message.setText("인증 코드 : " + verificationCode);
         javaMailSender.send(message);
 
