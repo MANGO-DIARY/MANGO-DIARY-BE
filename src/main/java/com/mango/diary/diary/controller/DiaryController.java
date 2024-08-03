@@ -32,8 +32,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary")
-    public ResponseEntity<DiaryDetailResponse> readDiary(@RequestParam Long diaryId) {
-        return ResponseEntity.ok(diaryService.getDiary(diaryId));
+    public ResponseEntity<DiaryDetailResponse> readDiary(@Parameter(hidden = true) @AuthUser Long userId, @RequestParam Long diaryId) {
+        return ResponseEntity.ok(diaryService.getDiary(userId ,diaryId));
     }
 
     @GetMapping("/diary/all")

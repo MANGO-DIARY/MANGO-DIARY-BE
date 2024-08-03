@@ -92,8 +92,13 @@ public class DiaryService {
 
     }
 
-    public DiaryDetailResponse getDiary(Long diaryId) {
+    public DiaryDetailResponse getDiary(Long userId, Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+
+        if (!diary.getUser().getId().equals(userId)){
+            throw new DiaryException(DiaryErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
         return new DiaryDetailResponse(
                 diary.getId(),
                 diary.getContent(),
