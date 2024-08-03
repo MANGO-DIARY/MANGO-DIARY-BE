@@ -1,5 +1,6 @@
 package com.mango.diary.auth.service;
 
+import com.mango.diary.auth.controller.dto.GetUserResponse;
 import com.mango.diary.auth.controller.dto.UserPatchRequest;
 import com.mango.diary.auth.domain.User;
 import com.mango.diary.auth.exception.MAuthErrorCode;
@@ -24,5 +25,11 @@ public class UserService {
         }
 
         user.setUserName(userPatchRequest.userName());
+    }
+
+    public GetUserResponse getUser(Long userId) {
+        User user = userRepository.findById(userId).get();
+
+        return new GetUserResponse(user.getUserName(), user.getUserEmail());
     }
 }

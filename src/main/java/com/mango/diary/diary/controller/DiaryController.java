@@ -4,8 +4,6 @@ import com.mango.diary.auth.support.AuthUser;
 
 import com.mango.diary.common.enums.Emotion;
 import com.mango.diary.diary.dto.*;
-import com.mango.diary.diary.exception.DiaryErrorCode;
-import com.mango.diary.diary.exception.DiaryException;
 import com.mango.diary.diary.service.DiaryService;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -32,8 +31,8 @@ public class DiaryController {
     }
 
     @GetMapping("/diary")
-    public ResponseEntity<DiaryDetailResponse> readDiary(@RequestParam Long diaryId) {
-        return ResponseEntity.ok(diaryService.getDiary(diaryId));
+    public ResponseEntity<DiaryDetailResponse> readDiary(@Parameter(hidden = true) @AuthUser Long userId, @RequestParam Long diaryId) {
+        return ResponseEntity.ok(diaryService.getDiary(userId ,diaryId));
     }
 
     @GetMapping("/diary/all")
@@ -48,17 +47,17 @@ public class DiaryController {
     }
 
     @GetMapping("/diary/all/month")
-    public ResponseEntity<List<DiaryForCalenderResponse>> readAllDiariesByMonth(@RequestParam("Year") Long year, @RequestParam("Month") Long month, @Parameter(hidden = true) @AuthUser Long userId) {
-        return ResponseEntity.ok(diaryService.getAllDiariesByMonth(year, month, userId));
+    public ResponseEntity<List<DiaryForCalenderResponse>> readAllDiariesByMonth(@Parameter(description = "yyyy-MM 형태로 입력", example = "2024-08")
+                                                                                    @RequestParam YearMonth yearMonth,
+                                                                                @Parameter(hidden = true) @AuthUser Long userId) {
+        return ResponseEntity.ok(diaryService.getAllDiariesByMonth(yearMonth, userId));
     }
 
     @DeleteMapping("/diary")
-    public ResponseEntity<String> deleteDiary(@RequestParam Long diary_id) {
-        if (diaryService.deleteDiary(diary_id)) {
-            return new ResponseEntity<>("Diary deleted", HttpStatus.OK);
-        } else {
-            throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
-        }
+    public ResponseEntity<String> deleteDiary(@RequestParam Long diaryId,
+                                              @AuthUser @Parameter(hidden = true) Long userId) {
+        diaryService.deleteDiary(diaryId, userId);
+        return new ResponseEntity<>("일기가 삭제되었습니다.", HttpStatus.OK);
     }
 
     @GetMapping("/diary/search")

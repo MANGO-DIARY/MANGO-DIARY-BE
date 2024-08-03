@@ -17,6 +17,7 @@ public enum DiaryErrorCode implements ErrorCode {
     DIARY_NOT_FOUND_BY_EMOTION(404, 3008, "감정에 해당하는 일기를 찾을 수 없습니다."),
     INVALID_DATE_FORMAT(400, 3009, "날짜 형식이 올바르지 않습니다."),
     LIST_IS_NULL(400, 3010, "리스트가 비어있습니다."),
+    UNAUTHORIZED_ACCESS(401, 3011, "해당 일기에 접근 권한이 없습니다."),
     //----------------- AI -----------------
     DIARY_ANALYSIS_FAILED(400, 4000, "감정을 분석할 수 없는 일기입니다."),
     //----------------- TODAY COMMENT -----------------
