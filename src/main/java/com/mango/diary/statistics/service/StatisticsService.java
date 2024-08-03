@@ -23,10 +23,9 @@ public class StatisticsService {
         EmotionStatistics emotionStatistics = statisticsRepository.findByUserIdAndYearMonth(userId, yearMonth)
                 .orElseThrow(() -> new StatisticsException(StatisticsErrorCode.STATISTICS_NOT_FOUND));
 
-        String temp = emotionStatistics.getStatisticsComment();
         String statisticsComment;
 
-        if (temp == null) {
+        if (emotionStatistics.getStatisticsComment() == null) {
             if (emotionStatistics.getYearMonth().equals(now)) {
                 statisticsComment = "이번 달도 열심히 기록해봐요!";
             } else {
@@ -35,7 +34,7 @@ public class StatisticsService {
                 statisticsRepository.save(emotionStatistics);
             }
         } else {
-            statisticsComment = temp;
+            statisticsComment = emotionStatistics.getStatisticsComment();
         }
 
         return new StatisticsResponse(
