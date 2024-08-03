@@ -1,5 +1,6 @@
 package com.mango.diary.auth.controller;
 
+import com.mango.diary.auth.controller.dto.GetUserResponse;
 import com.mango.diary.auth.controller.dto.UserPatchRequest;
 import com.mango.diary.auth.service.UserService;
 import com.mango.diary.auth.support.AuthUser;
@@ -21,4 +22,8 @@ public class UserController {
         return ResponseEntity.ok().body("회원정보가 수정되었습니다.");
     }
 
+    @GetMapping("")
+    public ResponseEntity<GetUserResponse> getUser(@Parameter(hidden = true) @AuthUser Long userId) {
+        return ResponseEntity.ok(userService.getUser(userId));
+    }
 }
