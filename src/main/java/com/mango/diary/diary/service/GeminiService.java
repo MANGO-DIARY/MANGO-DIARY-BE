@@ -89,7 +89,9 @@ public class GeminiService {
                 .getBody()
                 .candidates().get(0)
                 .content().parts()
-                .get(0).text();
+                .get(0).text()
+                .replace("\n", "")
+                .replaceAll("\\s{2,}", " ");
 
         return new AiCommentResponse(aiComment);
     }
@@ -106,7 +108,9 @@ public class GeminiService {
                 .getBody()
                 .candidates().get(0)
                 .content().parts()
-                .get(0).text();
+                .get(0).text()
+                .replace("\n", "")
+                .replaceAll("\\s{2,}", " ");
 
         return aiComment;
     }
