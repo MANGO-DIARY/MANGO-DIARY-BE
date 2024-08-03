@@ -131,13 +131,7 @@ public class DiaryService {
        ));
     }
 
-    public List<DiaryForCalenderResponse> getAllDiariesByMonth( Long year, Long month , Long userId) {
-        if(year < 1900 || month <= 0 || month > 12 || year > 2100) {
-            throw new DiaryException(DiaryErrorCode.INVALID_DATE_FORMAT);
-        }
-
-        YearMonth yearMonth = YearMonth.of(year.intValue(), month.intValue());
-
+    public List<DiaryForCalenderResponse> getAllDiariesByMonth( YearMonth yearMonth , Long userId) {
         List<Diary> diaries = diaryRepository.findAllByDateBetweenAndUserId(yearMonth.atDay(1), yearMonth.atEndOfMonth(), userId);
 
         if (diaries.isEmpty()) {
@@ -152,20 +146,21 @@ public class DiaryService {
     }
 
     @Transactional
-    public boolean deleteDiary(Long diary_id) {
-        if (!diaryRepository.existsById(diary_id)) {
+    public void deleteDiary(Long diaryId, Long userId) {
+        if (!diaryRepository.existsById(diaryId)) {
             throw new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND);
         } else {
-            Diary diary = diaryRepository.findById(diary_id).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+            Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new DiaryException(DiaryErrorCode.DIARY_NOT_FOUND));
+            if(!diary.getUser().getId().equals(userId)){
+                throw new DiaryException(DiaryErrorCode.UNAUTHORIZED_ACCESS);
+            }
 
             statisticsRepository.findByUserIdAndYearMonth(diary.getUser().getId(), YearMonth.from(diary.getDate()))
                     .ifPresent(statistics -> {
                         statistics.decreaseEmotionCount(diary.getEmotion());
                         statisticsRepository.save(statistics);
                     });
-
             diaryRepository.delete(diary);
-            return true;
         }
     }
 
@@ -178,5 +173,4 @@ public class DiaryService {
                 diary.getDate(),
                 diary.getEmotion()));
     }
-
 }
