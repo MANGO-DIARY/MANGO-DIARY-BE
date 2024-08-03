@@ -22,6 +22,7 @@ public class StatisticsController {
 
     @GetMapping()
     public ResponseEntity<StatisticsResponse> getStatistics(@Parameter(hidden = true) @AuthUser Long userId,
+                                                            @Parameter(description = "yyyy-MM 형태로 입력", example = "2024-08")
                                                             @RequestParam YearMonth yearMonth) {
         return ResponseEntity.ok(statisticsService.getStatistics(userId, yearMonth));
     }
