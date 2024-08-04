@@ -1,5 +1,6 @@
 package com.mango.diary.statistics.service;
 
+import com.mango.diary.statistics.dto.EmotionCounts;
 import com.mango.diary.statistics.dto.StatisticsResponse;
 import com.mango.diary.statistics.entity.EmotionStatistics;
 import com.mango.diary.statistics.exception.StatisticsErrorCode;
@@ -39,14 +40,16 @@ public class StatisticsService {
 
         return new StatisticsResponse(
                 emotionStatistics.getYearMonth(),
-                emotionStatistics.get기쁨(),
-                emotionStatistics.get신남(),
-                emotionStatistics.get행복(),
-                emotionStatistics.get평온(),
-                emotionStatistics.get슬픔(),
-                emotionStatistics.get분노(),
-                emotionStatistics.get불안(),
-                emotionStatistics.get우울(),
+                new EmotionCounts(
+                        emotionStatistics.get기쁨(),
+                        emotionStatistics.get신남(),
+                        emotionStatistics.get행복(),
+                        emotionStatistics.get평온(),
+                        emotionStatistics.get슬픔(),
+                        emotionStatistics.get분노(),
+                        emotionStatistics.get불안(),
+                        emotionStatistics.get우울()
+                ),
                 emotionStatistics.getMonthlyComment(),
                 statisticsComment
         )
