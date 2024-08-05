@@ -1,5 +1,8 @@
 package com.mango.diary.statistics.service;
 
+import com.mango.diary.diary.domain.AiComment;
+import com.mango.diary.diary.domain.Diary;
+import com.mango.diary.diary.repository.DiaryRepository;
 import com.mango.diary.statistics.dto.EmotionCounts;
 import com.mango.diary.statistics.dto.StatisticsResponse;
 import com.mango.diary.statistics.entity.EmotionStatistics;
@@ -10,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +22,7 @@ import java.util.Optional;
 public class StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
+    private final DiaryRepository diaryRepository;
 
     public StatisticsResponse getStatistics(Long userId, YearMonth yearMonth) {
         YearMonth now = YearMonth.now();
@@ -38,6 +44,8 @@ public class StatisticsService {
             statisticsComment = emotionStatistics.getStatisticsComment();
         }
 
+        List<String> aiComments = getAiComments(userId, yearMonth);
+
         return new StatisticsResponse(
                 emotionStatistics.getYearMonth(),
                 new EmotionCounts(
@@ -50,10 +58,26 @@ public class StatisticsService {
                         emotionStatistics.get불안(),
                         emotionStatistics.get우울()
                 ),
-                emotionStatistics.getMonthlyComment(),
+                aiComments,
                 statisticsComment
         )
                 ;
+    }
+
+    private List<String> getAiComments(Long userId, YearMonth yearMonth) {
+        List<Diary> diaries = diaryRepository.findAllByDateBetweenAndUserId(yearMonth.atDay(1), yearMonth.atEndOfMonth(), userId);
+        List<String> aiComments = new ArrayList<>();
+        for (Diary diary : diaries) {
+            // AI 댓글 객체를 가져올 때 null 체크
+            AiComment aiCommentObj = diary.getAiComments();
+            if (aiCommentObj != null) {
+                String aiComment = aiCommentObj.getContent(); // AI 댓글 내용 가져오기
+                if (aiComment != null && !aiComment.isEmpty()) {
+                    aiComments.add(aiComment);
+                }
+            }
+        }
+        return aiComments;
     }
 
     private String generateStatisticsComment(Long userId, EmotionStatistics emotionStatistics) {
