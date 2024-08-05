@@ -1,13 +1,13 @@
 package com.mango.diary.statistics.dto;
 
-import com.mango.diary.statistics.entity.EmotionStatistics;
 
 import java.time.YearMonth;
+import java.util.List;
 
 public record StatisticsResponse(
         YearMonth yearMonth,
         EmotionCounts emotionCounts,
-        String monthlyComment,
+        List<String> aiComments,
         String statisticsComment
 ) {
 }

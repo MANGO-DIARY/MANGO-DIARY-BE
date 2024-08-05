@@ -76,19 +76,14 @@ public class DiaryService {
 
         Optional<EmotionStatistics> emotionStatistics = statisticsRepository.findByUserIdAndYearMonth(userId, YearMonth.from(diary.getDate()));
 
-        if (emotionStatistics.isPresent()) {
-            EmotionStatistics statistics = emotionStatistics.get();
-            statistics.increaseEmotionCount(diary.getEmotion());
-            statisticsRepository.save(statistics);
-        } else {
-            EmotionStatistics statistics = EmotionStatistics.builder()
-                    .user(user)
-                    .monthlyComment(geminiService.getMonthlyComment())
-                    .yearMonth(YearMonth.from(diary.getDate()))
-                    .build();
-            statistics.increaseEmotionCount(diary.getEmotion());
-            statisticsRepository.save(statistics);
-        }
+        EmotionStatistics statistics;
+        statistics = emotionStatistics.orElseGet(() -> EmotionStatistics.builder()
+                .user(user)
+                .monthlyComment(geminiService.getMonthlyComment())
+                .yearMonth(YearMonth.from(diary.getDate()))
+                .build());
+        statistics.increaseEmotionCount(diary.getEmotion());
+        statisticsRepository.save(statistics);
 
     }
 
