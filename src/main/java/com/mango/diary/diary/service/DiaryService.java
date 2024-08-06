@@ -44,7 +44,7 @@ public class DiaryService {
 
     @Transactional
     public void createDiary(DiaryRequest diaryRequest, Long userId) {
-        if (diaryRepository.existsByDate(diaryRequest.date())) {
+        if (diaryRepository.existsByUserIdAndDate(userId, diaryRequest.date())) {
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_ALREADY_EXISTS);
         }
 

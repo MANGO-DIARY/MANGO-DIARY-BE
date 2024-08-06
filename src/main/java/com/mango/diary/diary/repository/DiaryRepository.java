@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-    boolean existsByDate(LocalDate date);
+    boolean existsByUserIdAndDate(Long userId, LocalDate date);
 
     List<Diary> findAllByDateBetweenAndUserId(LocalDate firstDate, LocalDate endDate, Long userId);
 
