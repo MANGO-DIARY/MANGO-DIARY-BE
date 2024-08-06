@@ -2,13 +2,11 @@ package com.mango.diary.diary.domain;
 
 
 import com.mango.diary.auth.domain.User;
-import com.mango.diary.auth.support.AuthUser;
 import com.mango.diary.common.enums.Emotion;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Builder
 @AllArgsConstructor

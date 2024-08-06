@@ -26,9 +26,6 @@ public class EmotionStatistics {
     @Column(nullable = false)
     private YearMonth yearMonth;
 
-    @Column(nullable = false)
-    private String monthlyComment;
-
     @Setter
     private String statisticsComment;
 
@@ -58,10 +55,9 @@ public class EmotionStatistics {
 
 
     @Builder
-    public EmotionStatistics(User user, YearMonth yearMonth, String monthlyComment) {
+    public EmotionStatistics(User user, YearMonth yearMonth) {
         this.user = user;
         this.yearMonth = yearMonth;
-        this.monthlyComment = monthlyComment;
     }
 
     public void increaseEmotionCount(Emotion emotion) {
