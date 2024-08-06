@@ -20,8 +20,11 @@ public enum DiaryErrorCode implements ErrorCode {
     UNAUTHORIZED_ACCESS(401, 3011, "해당 일기에 접근 권한이 없습니다."),
     //----------------- AI -----------------
     DIARY_ANALYSIS_FAILED(400, 4000, "감정을 분석할 수 없는 일기입니다."),
-    //----------------- TODAY COMMENT -----------------
-    TODAY_COMMENT_NOT_FOUND(404, 6000, "오늘의 한마디를 찾을 수 없습니다."),;
+    SERVICE_UNAVAILABLE(500, 4001, "문제가 발생하였습니다. 잠시후에 다시 시도해주세요."),
+    GEMINI_SERVICE_UNAVAILABLE(500, 4002, "AI 서비스에 문제가 발생하였습니다."),
+    //----------------- TODAY COMMENT -----------------,
+    TODAY_COMMENT_NOT_FOUND(404, 6000, "오늘의 한마디를 찾을 수 없습니다.")
+    ;
 
 
     private final int statusCode;

@@ -1,6 +1,6 @@
 package com.mango.diary.diary.dto;
 
-public record DiaryIdRequest(
+public record DiaryIdDTO(
         Long diaryId
 ) {
 }

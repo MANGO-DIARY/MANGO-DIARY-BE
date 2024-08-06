@@ -24,10 +24,9 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping("/diary")
-    public ResponseEntity<?> saveDiary(@RequestBody DiaryRequest diaryRequest,
+    public ResponseEntity<DiaryIdDTO> saveDiary(@RequestBody DiaryRequest diaryRequest,
                                        @Parameter(hidden = true) @AuthUser Long userId) {
-        diaryService.createDiary(diaryRequest, userId);
-        return new ResponseEntity<>("일기가 작성되었습니다.", HttpStatus.CREATED);
+        return ResponseEntity.ok(diaryService.createDiary(diaryRequest, userId));
     }
 
     @GetMapping("/diary")
@@ -54,7 +53,7 @@ public class DiaryController {
     }
 
     @DeleteMapping("/diary")
-    public ResponseEntity<?> deleteDiary(@RequestBody DiaryIdRequest diaryId,
+    public ResponseEntity<?> deleteDiary(@RequestBody DiaryIdDTO diaryId,
                                               @AuthUser @Parameter(hidden = true) Long userId) {
         diaryService.deleteDiary(diaryId.diaryId(), userId);
         return new ResponseEntity<>("일기가 삭제되었습니다.", HttpStatus.OK);
