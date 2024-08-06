@@ -40,7 +40,6 @@ public class DiaryService {
     private final AiCommentRepository aiCommentRepository;
     private final UserRepository userRepository;
     private final StatisticsRepository statisticsRepository;
-    private final GeminiService geminiService;
 
     @Transactional
     public DiaryIdDTO createDiary(DiaryRequest diaryRequest, Long userId) {
@@ -79,7 +78,6 @@ public class DiaryService {
         EmotionStatistics statistics;
         statistics = emotionStatistics.orElseGet(() -> EmotionStatistics.builder()
                 .user(user)
-                .monthlyComment(geminiService.getMonthlyComment())
                 .yearMonth(YearMonth.from(diary.getDate()))
                 .build());
         statistics.increaseEmotionCount(diary.getEmotion());
