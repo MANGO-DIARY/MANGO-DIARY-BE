@@ -43,7 +43,7 @@ public class DiaryService {
     private final GeminiService geminiService;
 
     @Transactional
-    public void createDiary(DiaryRequest diaryRequest, Long userId) {
+    public DiaryIdDTO createDiary(DiaryRequest diaryRequest, Long userId) {
         if (diaryRepository.existsByUserIdAndDate(userId, diaryRequest.date())) {
             throw new DiaryException(DiaryErrorCode.DIARY_ENTRY_ALREADY_EXISTS);
         }
@@ -85,6 +85,7 @@ public class DiaryService {
         statistics.increaseEmotionCount(diary.getEmotion());
         statisticsRepository.save(statistics);
 
+        return new DiaryIdDTO(diary.getId());
     }
 
     public DiaryDetailResponse getDiary(Long userId, Long diaryId) {

@@ -4,7 +4,6 @@ import com.mango.diary.common.enums.Emotion;
 import com.mango.diary.diary.dto.*;
 import com.mango.diary.diary.exception.DiaryErrorCode;
 import com.mango.diary.diary.exception.DiaryException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -116,17 +116,25 @@ public class GeminiService {
     }
 
     private ResponseEntity<GeminiResponse> getGeminiResponseResponseEntity(GeminiRequest request, HttpHeaders headers) {
-        HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
+        try {
+            HttpEntity<GeminiRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(GEMINI_API_URL)
-                .queryParam("key", GEMINI_API_KEY)
-                .toUriString();
+            String url = UriComponentsBuilder.fromHttpUrl(GEMINI_API_URL)
+                    .queryParam("key", GEMINI_API_KEY)
+                    .toUriString();
 
-        ResponseEntity<GeminiResponse> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                GeminiResponse.class);
-        return response;
+            ResponseEntity<GeminiResponse> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    GeminiResponse.class);
+            return response;
+        } catch (HttpServerErrorException.ServiceUnavailable e) {
+            log.error("Gemini API가 과부하 상태입니다. (503 Service Unavailable)", e);
+            throw new DiaryException(DiaryErrorCode.SERVICE_UNAVAILABLE);
+        } catch (Exception e) {
+            log.error("Gemini API 요청 중 오류가 발생했습니다.", e);
+            throw new DiaryException(DiaryErrorCode.GEMINI_SERVICE_UNAVAILABLE);
+        }
     }
 }

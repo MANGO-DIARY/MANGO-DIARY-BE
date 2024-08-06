@@ -34,7 +34,7 @@ public class JwtProvider {
     private static final Long ONE_HOUR = 60 * 60L;
     private static final Long ONE_DAY = 60 * 60L * 24;
     private static final Long ONE_MONTH = 60 * 60L * 24 * 30;
-    private static final Long ACCESS_TOKEN_EXPIRATION_TIME = ONE_HOUR * 1L;
+    private static final Long ACCESS_TOKEN_EXPIRATION_TIME = ONE_HOUR * 12L;
     private static final Long REFRESH_TOKEN_EXPIRATION_TIME = ONE_MONTH * 6L;
 
 
