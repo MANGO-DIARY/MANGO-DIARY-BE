@@ -23,7 +23,7 @@ public class EmotionStatistics {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private YearMonth yearMonth;
 
     @Column(nullable = false)

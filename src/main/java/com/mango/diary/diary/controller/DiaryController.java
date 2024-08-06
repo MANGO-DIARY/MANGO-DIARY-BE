@@ -54,9 +54,9 @@ public class DiaryController {
     }
 
     @DeleteMapping("/diary")
-    public ResponseEntity<?> deleteDiary(@RequestParam Long diaryId,
+    public ResponseEntity<?> deleteDiary(@RequestBody DiaryIdRequest diaryId,
                                               @AuthUser @Parameter(hidden = true) Long userId) {
-        diaryService.deleteDiary(diaryId, userId);
+        diaryService.deleteDiary(diaryId.diaryId(), userId);
         return new ResponseEntity<>("일기가 삭제되었습니다.", HttpStatus.OK);
     }
 
