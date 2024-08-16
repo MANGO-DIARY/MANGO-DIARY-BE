@@ -28,7 +28,7 @@ public class Diary {
     private LocalDate date;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Emotion emotion;
 
     @ManyToOne(fetch = FetchType.LAZY)
