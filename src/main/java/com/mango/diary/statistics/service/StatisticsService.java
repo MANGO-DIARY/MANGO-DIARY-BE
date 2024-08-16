@@ -49,14 +49,14 @@ public class StatisticsService {
         return new StatisticsResponse(
                 emotionStatistics.getYearMonth(),
                 new EmotionCounts(
-                        emotionStatistics.get기쁨(),
-                        emotionStatistics.get신남(),
-                        emotionStatistics.get행복(),
-                        emotionStatistics.get평온(),
-                        emotionStatistics.get슬픔(),
-                        emotionStatistics.get분노(),
-                        emotionStatistics.get불안(),
-                        emotionStatistics.get우울()
+                        emotionStatistics.getJoy(),
+                        emotionStatistics.getExcitement(),
+                        emotionStatistics.getHappiness(),
+                        emotionStatistics.getCalm(),
+                        emotionStatistics.getSadness(),
+                        emotionStatistics.getAnger(),
+                        emotionStatistics.getAnxiety(),
+                        emotionStatistics.getDepression()
                 ),
                 aiComments,
                 statisticsComment
@@ -85,21 +85,20 @@ public class StatisticsService {
         Optional<EmotionStatistics> lastMonthStatistics = statisticsRepository.findByUserIdAndYearMonth(userId, yearMonth);
 
         if (lastMonthStatistics.isEmpty()) {
-            Long thisMonthPositiveTotal = emotionStatistics.get기쁨() + emotionStatistics.get신남() + emotionStatistics.get행복() + emotionStatistics.get평온();
-            Long thisMonthNegativeTotal = emotionStatistics.get슬픔() + emotionStatistics.get분노() + emotionStatistics.get불안() + emotionStatistics.get우울();
+            Long thisMonthPositiveTotal = emotionStatistics.getJoy() + emotionStatistics.getExcitement() + emotionStatistics.getHappiness() + emotionStatistics.getCalm();
+            Long thisMonthNegativeTotal = emotionStatistics.getSadness() + emotionStatistics.getAnger() + emotionStatistics.getAnxiety() + emotionStatistics.getDepression();
             return statisticsOnlyThisMonth(thisMonthPositiveTotal, thisMonthNegativeTotal);
         }
 
         return lastMonthExists(emotionStatistics, lastMonthStatistics.get());
-
     }
 
     private String lastMonthExists(EmotionStatistics thisMonth, EmotionStatistics lastMonth) {
-        Long thisMonthPositiveTotal = thisMonth.get기쁨() + thisMonth.get신남() + thisMonth.get행복() + thisMonth.get평온();
-        Long lastMonthPositiveTotal = lastMonth.get기쁨() + lastMonth.get신남() + lastMonth.get행복() + lastMonth.get평온();
+        Long thisMonthPositiveTotal = thisMonth.getJoy() + thisMonth.getExcitement() + thisMonth.getHappiness() + thisMonth.getCalm();
+        Long lastMonthPositiveTotal = lastMonth.getJoy() + lastMonth.getExcitement() + lastMonth.getHappiness() + lastMonth.getCalm();
 
-        Long thisMonthNegativeTotal = thisMonth.get슬픔() + thisMonth.get분노() + thisMonth.get불안() + thisMonth.get우울();
-        Long lastMonthNegativeTotal = lastMonth.get슬픔() + lastMonth.get분노() + lastMonth.get불안() + lastMonth.get우울();
+        Long thisMonthNegativeTotal = thisMonth.getSadness() + thisMonth.getAnger() + thisMonth.getAnxiety() + thisMonth.getDepression();
+        Long lastMonthNegativeTotal = lastMonth.getSadness() + lastMonth.getAnger() + lastMonth.getAnxiety() + lastMonth.getDepression();
 
         long positiveIncrease = thisMonthPositiveTotal - lastMonthPositiveTotal;
         long negativeDecrease = thisMonthNegativeTotal - lastMonthNegativeTotal;
@@ -113,6 +112,7 @@ public class StatisticsService {
             return "지난 달보다 부정적인 일기를 " + negativeDecrease + "개 덜 썼어요!";
         }
     }
+
 
     private String statisticsOnlyThisMonth(Long thisMonthPositiveTotal, Long thisMonthNegativeTotal) {
         if (thisMonthPositiveTotal > thisMonthNegativeTotal) {
