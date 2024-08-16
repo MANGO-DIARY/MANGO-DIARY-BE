@@ -5,15 +5,15 @@
 
 ## 💻 Developers
 
-|BE | BE | DevOps |
-| :---: | :---: | :---: |
-|  <img style="width: 200px;" src="https://github.com/user-attachments/assets/7248e043-922a-494f-9778-a42b59a5ab5b" />  |  |  |
-|국민대학교|국민대학교|국민대학교|
-|김도훈|김상민|김승언|
-|   [@eraser502](https://github.com/eraser502)   | [@sangkim99](https://github.com/sangkim99) | [@tmdtmdqorekf](https://github.com/tmdtmdqorekf) |
+|                                                         BE                                                          | BE | DevOps |
+|:-------------------------------------------------------------------------------------------------------------------:| :---: | :---: |
+| <img style="width: 200px;" src="https://github.com/user-attachments/assets/7248e043-922a-494f-9778-a42b59a5ab5b" /> |  |  |
+|                                                        국민대학교                                                        |국민대학교|국민대학교|
+|                                                         김도훈                                                         |김상민|김승언|
+|                                     [@eraser502](https://github.com/eraser502)                                      | [@sangkim99](https://github.com/sangkim99) | [@tmdtmdqorekf](https://github.com/tmdtmdqorekf) |
 
 ## 📲 Tech
-
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"><img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"><img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"><img src="https://img.shields.io/badge/Postgresql-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"><img src="https://img.shields.io/badge/Redis-FF4438?style=for-the-badge&logo=redis&logoColor=white">
 
 ## 📲 기능
 
