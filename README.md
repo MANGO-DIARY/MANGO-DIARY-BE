@@ -7,7 +7,7 @@
 
 |BE | BE | DevOps |
 | :---: | :---: | :---: |
-|  <img style="width: 200px;" src="" />  |  |  |
+|  <img style="width: 200px;" src="https://github.com/user-attachments/assets/7248e043-922a-494f-9778-a42b59a5ab5b" />  |  |  |
 |국민대학교|국민대학교|국민대학교|
 |김도훈|김상민|김승언|
 |   [@eraser502](https://github.com/eraser502)   | [@sangkim99](https://github.com/sangkim99) | [@tmdtmdqorekf](https://github.com/tmdtmdqorekf) |
