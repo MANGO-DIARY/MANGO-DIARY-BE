@@ -74,14 +74,14 @@ public class MainService {
 
     private List<EmotionCountDTO> getTopThreeEmotions(EmotionStatistics statistics) {
         Map<Emotion, Long> emotions = new HashMap<>();
-        emotions.put(Emotion.기쁨, statistics.get기쁨());
-        emotions.put(Emotion.신남, statistics.get신남());
-        emotions.put(Emotion.행복, statistics.get행복());
-        emotions.put(Emotion.평온, statistics.get평온());
-        emotions.put(Emotion.우울, statistics.get우울());
-        emotions.put(Emotion.불안, statistics.get불안());
-        emotions.put(Emotion.슬픔, statistics.get슬픔());
-        emotions.put(Emotion.분노, statistics.get분노());
+        emotions.put(Emotion.JOY, statistics.getJoy());
+        emotions.put(Emotion.EXCITEMENT, statistics.getExcitement());
+        emotions.put(Emotion.HAPPINESS, statistics.getHappiness());
+        emotions.put(Emotion.CALM, statistics.getCalm());
+        emotions.put(Emotion.DEPRESSION, statistics.getDepression());
+        emotions.put(Emotion.ANXIETY, statistics.getAnxiety());
+        emotions.put(Emotion.SADNESS, statistics.getSadness());
+        emotions.put(Emotion.ANGER, statistics.getAnger());
 
         return emotions.entrySet().stream()
                 .filter(entry -> entry.getValue() > 0)

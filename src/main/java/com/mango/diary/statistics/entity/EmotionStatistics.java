@@ -30,29 +30,28 @@ public class EmotionStatistics {
     private String statisticsComment;
 
     @Column(nullable = false)
-    private Long 기쁨 = 0L;
+    private Long joy = 0L;
 
     @Column(nullable = false)
-    private Long 신남 = 0L;
+    private Long excitement = 0L;
 
     @Column(nullable = false)
-    private Long 행복 = 0L;
+    private Long happiness = 0L;
 
     @Column(nullable = false)
-    private Long 평온 = 0L;
+    private Long calm = 0L;
 
     @Column(nullable = false)
-    private Long 우울 = 0L;
+    private Long depression = 0L;
 
     @Column(nullable = false)
-    private Long 불안 = 0L;
+    private Long anxiety = 0L;
 
     @Column(nullable = false)
-    private Long 슬픔 = 0L;
+    private Long sadness = 0L;
 
     @Column(nullable = false)
-    private Long 분노 = 0L;
-
+    private Long anger = 0L;
 
     @Builder
     public EmotionStatistics(User user, YearMonth yearMonth) {
@@ -62,58 +61,58 @@ public class EmotionStatistics {
 
     public void increaseEmotionCount(Emotion emotion) {
         switch (emotion) {
-            case 기쁨:
-                this.기쁨++;
+            case JOY:
+                this.joy++;
                 break;
-            case 신남:
-                this.신남++;
+            case EXCITEMENT:
+                this.excitement++;
                 break;
-            case 행복:
-                this.행복++;
+            case HAPPINESS:
+                this.happiness++;
                 break;
-            case 평온:
-                this.평온++;
+            case CALM:
+                this.calm++;
                 break;
-            case 우울:
-                this.우울++;
+            case DEPRESSION:
+                this.depression++;
                 break;
-            case 불안:
-                this.불안++;
+            case ANXIETY:
+                this.anxiety++;
                 break;
-            case 슬픔:
-                this.슬픔++;
+            case SADNESS:
+                this.sadness++;
                 break;
-            case 분노:
-                this.분노++;
+            case ANGER:
+                this.anger++;
                 break;
         }
     }
 
     public void decreaseEmotionCount(Emotion emotion) {
         switch (emotion) {
-            case 기쁨:
-                this.기쁨--;
+            case JOY:
+                this.joy--;
                 break;
-            case 신남:
-                this.신남--;
+            case EXCITEMENT:
+                this.excitement--;
                 break;
-            case 우울:
-                this.우울--;
+            case HAPPINESS:
+                this.happiness--;
                 break;
-            case 불안:
-                this.불안--;
+            case CALM:
+                this.calm--;
                 break;
-            case 슬픔:
-                this.슬픔--;
+            case DEPRESSION:
+                this.depression--;
                 break;
-            case 행복:
-                this.행복--;
+            case ANXIETY:
+                this.anxiety--;
                 break;
-            case 평온:
-                this.평온--;
+            case SADNESS:
+                this.sadness--;
                 break;
-            case 분노:
-                this.분노--;
+            case ANGER:
+                this.anger--;
                 break;
         }
     }
