@@ -37,12 +37,14 @@ public class DiaryController {
     @GetMapping("/diary/all")
     public ResponseEntity<Page<DiaryResponse>> getDiaryList(@RequestParam int page,
                                                             @RequestParam int size,
-                                                            @RequestParam(required = false) Emotion emotion,
+                                                            @RequestParam(required = false) Integer emotion,
                                                             @Parameter(hidden = true) @AuthUser Long userId) {
+
+        Emotion emotion2 = (emotion != null) ? Emotion.fromCode(emotion) : null;
         if (emotion == null) {
             return ResponseEntity.ok(diaryService.getAllDiaries(page, size, userId));
         }
-        return ResponseEntity.ok(diaryService.getAllDiariesByEmotion(page, size, emotion, userId));
+        return ResponseEntity.ok(diaryService.getAllDiariesByEmotion(page, size, emotion2, userId));
     }
 
     @GetMapping("/diary/all/month")
